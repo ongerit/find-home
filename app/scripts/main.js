@@ -41,6 +41,30 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+function sendData() {
+
+  var ADDRESS= $('input[name*="address"]').val();
+  var CITY= $('input[name*="city"]').val();
+  var STATE= $('input[name*="state"]').val();
+  var ZIP= $('textarea[name*="zip"]').val();
+  var VARS = 'address='+ADDRESS+'&city='+CITY+'&state='+STATE+'&zip='+ZIP;
+
+  //stop the form from submitting normally
+  event.preventDefault();
+
+  //send the data using post with element values
+
+  $.ajax({
+    type: 'POST',
+    url: 'p.php',
+    data: VARS,
+    cache: false,
+    success: function() {
+      return;
+    }
+  });
+}
+
 function sendFormData() {
   //stop the form from submitting normally
   event.preventDefault();
@@ -125,3 +149,4 @@ function sendFormData() {
 }
 
 $('form').bind('submit', sendFormData);
+$('form').bind('submit', sendData);
