@@ -11,7 +11,7 @@ $apiKey = API_KEY;
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=".$apiKey."&address=".$address."&citystatezip=".$city.$state.$zip."&rentzestimate=true",
+  CURLOPT_URL => "http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=".$apiKey."&address=".$address."&citystatezip=".$city.'%20'.$state.'%20'.$zip."&rentzestimate=true",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,

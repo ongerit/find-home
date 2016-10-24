@@ -41,56 +41,68 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-function sendData() {
+// function sendData() {
 
-  var ADDRESS= $('input[name*="address"]').val();
-  var CITY= $('input[name*="city"]').val();
-  var STATE= $('input[name*="state"]').val();
-  var ZIP= $('textarea[name*="zip"]').val();
-  var VARS = 'address='+ADDRESS+'&city='+CITY+'&state='+STATE+'&zip='+ZIP;
-
-  //stop the form from submitting normally
-  event.preventDefault();
-
-  //send the data using post with element values
-
-  $.ajax({
-    type: 'POST',
-    url: 'p.php',
-    data: VARS,
-    cache: false,
-    success: function() {
-      return;
-    }
-  });
-}
+//   var ADDRESS= $('input[name*="address"]').val();
+//   var CITY= $('input[name*="city"]').val();
+//   var STATE= $('input[name*="state"]').val();
+//   var ZIP= $('textarea[name*="zip"]').val();
+//   var VARS = 'address='+ADDRESS+'&city='+CITY+'&state='+STATE+'&zip='+ZIP;
+//
+//   //stop the form from submitting normally
+//   event.preventDefault();
+//
+//   //send the data using post with element values
+//
+//   $.ajax({
+//     type: 'POST',
+//     url: 'p.php',
+//     data: VARS,
+//     cache: false,
+//     success: function() {
+//       return;
+//     }
+//   });
+// }
 
 function sendFormData() {
   //stop the form from submitting normally
   event.preventDefault();
   //send the data using post with element values
-  var formAddress = $('.address').val(); // jshint ignore:line
-  var cityAddress = $('.city').val(); // jshint ignore:line
-  var stateAddress = $('.state').val(); // jshint ignore:line
-  var zipAddress = $('.zip').val(); // jshint ignore:line
+  // var formAddress = $('.address').val(); // jshint ignore:line
+  // var cityAddress = $('.city').val(); // jshint ignore:line
+  // var stateAddress = $('.state').val(); // jshint ignore:line
+  // var zipAddress = $('.zip').val(); // jshint ignore:line
 
+  var ADDRESS= $('input[name*="address"]').val();
+  var CITY= $('input[name*="city"]').val();
+  var STATE= $('input[name*="state"]').val();
+  var ZIP= $('textarea[name*="zip"]').val();
+
+  var VARS = 'address='+ADDRESS+'&city='+CITY+'&state='+STATE+'&zip='+ZIP;
 
   var settings = {
-    'async': true,
-    'crossDomain': true,
-    'url': 'http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz19ktrnf9pmz_64j9s&address='+formAddress+'&citystatezip='+cityAddress+'%20'+stateAddress+'%20'+zipAddress+'&rentzestimate=true',
-    'method': 'POST',
-    'headers': {
-    'authorization': 'Bearer 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',
-    'content-type': 'application/json',
-    'cache-control': 'no-cache',
-    'postman-token': '8c89a29a-6f8f-676a-d823-05d8aeca3ed1'
-  },
-  'processData': false,
-};
+    async: true,
+    crossDomain: true,
+    type: 'POST',
+    url: '/p.php',
+    data: VARS,
+    cache: false,
+    success: function() {
+      return;
+    }
+    // 'async': true,
+    // 'crossDomain': true,
+    // 'url': 'http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz19ktrnf9pmz_64j9s&address='+formAddress+'&citystatezip='+cityAddress+'%20'+stateAddress+'%20'+zipAddress+'&rentzestimate=true',
+    // 'method': 'POST',
+    // 'headers': {
+    // 'content-type': 'application/json',
+    // 'cache-control': 'no-cache',
+  };
 
   $.ajax(settings).done(function (response) {
-  console.log();
+
+  console.log(response);
 
   var jsonData = xmlToJson(response);
   var xml = response, // jshint ignore:line
@@ -118,8 +130,6 @@ function sendFormData() {
 
   var map;
   function initMap(longitude,latitude,formAddress) {
-    console.log(longitude);
-    console.log(latitude);
 
     var myLatLng = {lat: latitude, lng: longitude};
 
@@ -149,4 +159,4 @@ function sendFormData() {
 }
 
 $('form').bind('submit', sendFormData);
-$('form').bind('submit', sendData);
+// $('form').bind('submit', sendData);
