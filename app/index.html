@@ -68,5 +68,29 @@
         <!-- build:js({app,.tmp}) scripts/main.js -->
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
+
+  <script src="https://www.gstatic.com/firebasejs/3.5.1/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyAlQksO8QFqqT5798QzzKcr2qLLecStdas",
+      authDomain: "home-finder-66a1c.firebaseapp.com",
+      databaseURL: "https://home-finder-66a1c.firebaseio.com",
+      storageBucket: "",
+      messagingSenderId: "736544451951"
+    };
+    firebase.initializeApp(config);
+  </script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-11614378-7', 'auto');
+ga('send', 'pageview');
+
+</script>
 </body>
 </html>
