@@ -37,47 +37,64 @@ function xmlToJson(xml) {
 	return obj;
 }
 
+function XML2jsobj(node) {
+
+	var	data = {};
+
+	// append a value
+	function Add(name, value) {
+		if (data[name]) {
+			if (data[name].constructor != Array) {
+				data[name] = [data[name]];
+			}
+			data[name][data[name].length] = value;
+		}
+		else {
+			data[name] = value;
+		}
+	};
+
+	// element attributes
+	var c, cn;
+	for (c = 0; cn = node.attributes[c]; c++) {
+		Add(cn.name, cn.value);
+	}
+
+	// child elements
+	for (c = 0; cn = node.childNodes[c]; c++) {
+		if (cn.nodeType == 1) {
+			if (cn.childNodes.length == 1 && cn.firstChild.nodeType == 3) {
+				// text value
+				Add(cn.nodeName, cn.firstChild.nodeValue);
+			}
+			else {
+				// sub-object
+				Add(cn.nodeName, XML2jsobj(cn));
+			}
+		}
+	}
+
+	return data;
+
+}
+
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
-
-// function sendData() {
-
-//   var ADDRESS= $('input[name*="address"]').val();
-//   var CITY= $('input[name*="city"]').val();
-//   var STATE= $('input[name*="state"]').val();
-//   var ZIP= $('textarea[name*="zip"]').val();
-//   var VARS = 'address='+ADDRESS+'&city='+CITY+'&state='+STATE+'&zip='+ZIP;
-//
-//   //stop the form from submitting normally
-//   event.preventDefault();
-//
-//   //send the data using post with element values
-//
-//   $.ajax({
-//     type: 'POST',
-//     url: 'p.php',
-//     data: VARS,
-//     cache: false,
-//     success: function() {
-//       return;
-//     }
-//   });
-// }
 
 function sendFormData() {
   //stop the form from submitting normally
   event.preventDefault();
   //send the data using post with element values
-  // var formAddress = $('.address').val(); // jshint ignore:line
-  // var cityAddress = $('.city').val(); // jshint ignore:line
-  // var stateAddress = $('.state').val(); // jshint ignore:line
-  // var zipAddress = $('.zip').val(); // jshint ignore:line
+  var formAddress = $('.address').val(); // jshint ignore:line
+  var cityAddress = $('.city').val(); // jshint ignore:line
+  var stateAddress = $('.state').val(); // jshint ignore:line
+  var zipAddress = $('.zip').val(); // jshint ignore:line
 
   var ADDRESS= $('input[name*="address"]').val();
   var CITY= $('input[name*="city"]').val();
   var STATE= $('input[name*="state"]').val();
-  var ZIP= $('textarea[name*="zip"]').val();
+  var ZIP= $('input[name*="zip"]').val();
 
   var VARS = 'address='+ADDRESS+'&city='+CITY+'&state='+STATE+'&zip='+ZIP;
 
@@ -87,29 +104,23 @@ function sendFormData() {
     type: 'POST',
     url: '/p.php',
     data: VARS,
-    cache: false,
-    success: function() {
-      return;
-    }
-    // 'async': true,
-    // 'crossDomain': true,
-    // 'url': 'http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz19ktrnf9pmz_64j9s&address='+formAddress+'&citystatezip='+cityAddress+'%20'+stateAddress+'%20'+zipAddress+'&rentzestimate=true',
-    // 'method': 'POST',
-    // 'headers': {
-    // 'content-type': 'application/json',
-    // 'cache-control': 'no-cache',
+    cache: false
   };
 
   $.ajax(settings).done(function (response) {
-
   console.log(response);
+  console.log(typeof response);
 
-  var jsonData = xmlToJson(response);
-  var xml = response, // jshint ignore:line
-  xmlDoc = $.parseXML(response),
-  $xml = $( xmlDoc ); // jshint ignore:line
+  var xmlString = response;
+  var parser = new DOMParser();
+  var obj = parser.parseFromString(xmlString, "text/xml");
+  var jsonData = xmlToJson(obj);
 
-  console.log(xmlDoc);
+  // var xml = response, // jshint ignore:line
+  // xmlDoc = $.parseXML(response),
+  // $xml = $( xmlDoc ); // jshint ignore:line
+
+  console.log(jsonData);
   var result = jsonData['SearchResults:searchresults'].response.results.result;
   var street = result.address.street['#text'];
   var price = parseFloat(result.zestimate.amount['#text']);
